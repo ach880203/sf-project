@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.community.CommunityMapper">
+  
+  <insert id="insert">
+  
+  	<selectKey order="AFTER" keyProperty="bno" resultType="long">
+  		select LAST_INSERT_ID()
+  	</selectKey>
+  
+	  insert into tbl_community(title,content, writer)
+	  values (#{title}, #{content}, #{writer})
+  </insert>
+  
+  <!-- 단건 조회 -->
+  <select id="selectOne" resultType="org.zerock.community.CommunityDTO">
+  	select * from tbl_community where bno = #{bno}
+  </select>
+  
+	<!-- 삭제(소프트: 데이터는 남겨두고 화면에 안보이게 한다.) -->  
+  <update id="remove">
+  	update tbl_community set delflag = true 
+  	where bno = #{bno}
+  </update>
+  
+  <!-- 수정 -->
+  <update id="update">
+  	update tbl_community set 
+  		title=#{title}, 
+  		content=#{content},
+  		updatedate = now(), 
+  		delflag = #{delFlag}
+  	where bno = #{bno}
+  </update>
+  
+  <!-- 검색 조건 -->
+  <sql id="search">
+   	<if test="types != null and types.length > 0 and keyword != null 
+   	  		and keyword != ''">
+	  		<foreach collection="types" item="type" open="and (" 
+	  			close=")" separator="or">
+	  			<if test='type.equals("T")'>
+	  				title like concat('%', #{keyword}, '%')
+	  			</if>
+	  			<if test='type.equals("C")'>
+	  				content like concat('%', #{keyword}, '%')
+	  			</if>
+	  			<if test='type.equals("W")'>
+	  				writer like concat('%', #{keyword}, '%')
+	  			</if>
+	  		</foreach>
+	  	</if> 
+  </sql>
+
+  <!-- 커뮤니티 목록 (검색 + 페이징 + 댓글 수) -->
+  <select id="listSearch" resultType="org.zerock.community.CommunityDTO">
+    select
+        c.bno,
+        c.title,
+        c.content,
+        c.writer,
+        c.regdate as regDate,
+        c.updatedate as updateDate,
+        count(r.rno) as replyCnt
+    from tbl_community c
+    left join tbl_community_reply r
+        on c.bno = r.bno
+        and r.delflag = false
+    where c.delflag = false
+    <include refid="search"/>
+    group by c.bno
+    order by c.bno desc
+    limit #{skip}, #{count}
+  </select>
+  
+  <!-- 전체 개수 -->
+  <select id="listCountSearch" resultType="int">
+	select count(bno) 
+  	from tbl_community
+  	where delflag = false
+  	
+  	<include refid="search"></include>
+  	
+  </select>
+</mapper>

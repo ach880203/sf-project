@@ -1,0 +1,461 @@
+:root{
+  --gold-main: #f5c542;
+  --gold-soft: #fff1b8;
+  --bg-main: #fffdf6;
+  --text-main: #2e2e2e;
+  --text-sub: #777;
+}
+
+/* 공통 */
+body{
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* HEADER */
+.app-header{
+  height: 72px;
+  background: linear-gradient(135deg,#ffd84d,#f5b700);
+  box-shadow: 0 6px 20px rgba(245,197,66,.35);
+}
+
+.header-inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.logo{
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #3a2a00;
+}
+
+.main-nav a{
+  margin: 0 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #3a2a00;
+}
+
+.main-nav a:hover{
+  text-decoration: underline;
+}
+
+.auth-box{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-btn,
+.logout-btn{
+  padding: 6px 14px;
+  border-radius: 14px;
+  background: #fff;
+  color: #3a2a00;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.user-name{
+  font-size: 14px;
+}
+
+/* MAIN */
+.main-container{
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+/* FOOTER */
+.app-footer{
+  margin-top: 80px;
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+
+
+/* =========================
+   GoldenBook Community UI
+   ========================= */
+
+:root{
+  --gb-gold: #f5c542;
+  --gb-gold-2: #f5b700;
+  --gb-gold-soft: #fff1b8;
+  --gb-bg: #fffdf6;
+  --gb-card: rgba(255,255,255,0.85);
+  --gb-text: #2e2e2e;
+  --gb-sub: #777;
+  --gb-line: rgba(245,197,66,0.35);
+  --gb-shadow: 0 14px 40px rgba(245,197,66,0.18);
+}
+
+.main-container{
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.gb-page{
+  padding-bottom: 40px;
+}
+
+/* 카드(부트스트랩 card 덮어쓰기) */
+.card.gb-card{
+  border-radius: 22px;
+  background: var(--gb-card);
+  border: 2px solid rgba(255,241,184,0.9);
+  box-shadow: var(--gb-shadow);
+  overflow: hidden;
+}
+
+.gb-card-header{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  padding: 18px 18px;
+  background: linear-gradient(135deg, rgba(255,216,77,0.55), rgba(245,183,0,0.35));
+  border-bottom: 1px solid var(--gb-line);
+}
+
+.gb-card-title{
+  margin:0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #3a2a00;
+  letter-spacing: .2px;
+}
+
+.gb-card-body{
+  padding: 18px;
+}
+
+/* 버튼 통일 */
+.gb-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+
+  padding: 10px 16px;
+  border-radius: 16px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .18s ease;
+}
+
+.gb-btn-primary{
+  background: linear-gradient(135deg, #ffd84d, #f5b700);
+  color: #3a2a00;
+  box-shadow: 0 10px 24px rgba(245,197,66,0.28);
+}
+
+.gb-btn-ghost{
+  background: #fff;
+  border: 2px solid rgba(245,197,66,0.35);
+  color: #3a2a00;
+}
+
+.gb-btn-danger{
+  background: #ffebee;
+  border: 2px solid rgba(255,0,0,0.15);
+  color: #b00020;
+}
+
+.gb-btn:hover{
+  transform: translateY(-1px);
+}
+
+/* 테이블(리스트) */
+.gb-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.gb-table thead th{
+  font-size: 13px;
+  color: var(--gb-sub);
+  font-weight: 800;
+  padding: 10px 10px;
+}
+
+.gb-table tbody td{
+  background:#fff;
+  padding: 14px 10px;
+  border-top: 2px solid rgba(255,241,184,0.9);
+  border-bottom: 2px solid rgba(255,241,184,0.9);
+}
+
+.gb-table tbody tr td:first-child{
+  border-left: 2px solid rgba(255,241,184,0.9);
+  border-radius: 14px 0 0 14px;
+  width: 90px;
+  font-weight: 800;
+}
+
+.gb-table tbody tr td:last-child{
+  border-right: 2px solid rgba(255,241,184,0.9);
+  border-radius: 0 14px 14px 0;
+  width: 180px;
+  color: var(--gb-sub);
+}
+
+.gb-table a{
+  color: #d49b00;
+  font-weight: 800;
+  text-decoration: none;
+}
+.gb-table a:hover{
+  text-decoration: underline;
+}
+
+/* 툴바(검색) */
+.gb-toolbar{
+  display:flex;
+  justify-content:flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.gb-toolbar select,
+.gb-toolbar input{
+  border-radius: 14px !important;
+  border: 2px solid rgba(245,197,66,0.25) !important;
+  padding: 10px 12px !important;
+  background: #fff !important;
+}
+
+.gb-toolbar .searchBtn{
+  border-radius: 14px !important;
+  border: 0 !important;
+  background: linear-gradient(135deg, #ffd84d, #f5b700) !important;
+  color: #3a2a00 !important;
+  font-weight: 800 !important;
+}
+
+/* 페이징 */
+.pagination{
+  margin-top: 18px !important;
+}
+.pagination .page-link{
+  border-radius: 14px !important;
+  border: 2px solid rgba(245,197,66,0.25) !important;
+  color: #3a2a00 !important;
+  font-weight: 800;
+  margin: 0 3px;
+}
+.pagination .page-item.active .page-link{
+  background: linear-gradient(135deg, #ffd84d, #f5b700) !important;
+  border-color: transparent !important;
+}
+
+/* 폼(등록/읽기/수정) */
+.gb-form .input-group-text{
+  border-radius: 14px 0 0 14px !important;
+  border: 2px solid rgba(245,197,66,0.25) !important;
+  background: rgba(255,216,77,0.22) !important;
+  color: #3a2a00 !important;
+  font-weight: 800;
+}
+.gb-form .form-control,
+.gb-form textarea{
+  border-radius: 0 14px 14px 0 !important;
+  border: 2px solid rgba(245,197,66,0.25) !important;
+}
+.gb-form textarea{
+  min-height: 140px;
+  border-radius: 14px !important;
+}
+
+/* 댓글 영역 */
+.replyList .list-group-item{
+  border-radius: 16px;
+  border: 2px solid rgba(255,241,184,0.9);
+  margin-bottom: 10px;
+}
+
+/* ===== GoldenBook Home ===== */
+.main-container { min-height: calc(100vh - 140px); } /* 헤더/푸터 높이에 맞게 대충 */
+
+.gb-hero{
+  background: radial-gradient(circle at 20% 20%, rgba(255, 226, 145, 0.45), transparent 55%),
+              radial-gradient(circle at 80% 10%, rgba(255, 244, 200, 0.35), transparent 60%),
+              linear-gradient(180deg, #1b1b1b 0%, #0f0f0f 100%);
+  color: #fff;
+}
+
+.gb-badge{
+  display:inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 210, 110, 0.14);
+  border: 1px solid rgba(255, 210, 110, 0.35);
+  color:#ffe7b6;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.gb-title{
+  font-size: 46px;
+  line-height: 1.15;
+  font-weight: 800;
+  margin: 0;
+}
+
+.gb-title-accent{
+  background: linear-gradient(90deg, #fff2b0, #ffd36a, #f2b93b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gb-sub{
+  color: rgba(255,255,255,0.78);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+.btn-gold{
+  background: linear-gradient(90deg, #fff2b0, #ffd36a, #f2b93b);
+  border: 0;
+  color: #2b1a00;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+.btn-gold:hover{ filter: brightness(1.03); color:#2b1a00; }
+
+.btn-outline-gold{
+  border: 1px solid rgba(255, 211, 106, 0.7);
+  color: #ffe7b6;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+.btn-outline-gold:hover{
+  background: rgba(255, 211, 106, 0.12);
+  color: #fff2b0;
+}
+
+.gb-welcome{
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 211, 106, 0.12);
+  border: 1px solid rgba(255, 211, 106, 0.25);
+  color: #fff2c6;
+}
+
+.gb-pig-wrap{
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 24px;
+  background: rgba(255, 211, 106, 0.08);
+  border: 1px solid rgba(255, 211, 106, 0.18);
+}
+
+.gb-pig{ width: 100%; max-width: 360px; height: auto; }
+.gb-pig-caption{ color: rgba(255,255,255,0.75); font-weight: 600; }
+
+.gb-card{
+  padding: 16px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 211, 106, 0.14);
+  backdrop-filter: blur(6px);
+  min-height: 110px;
+}
+.gb-card-title{ font-weight: 800; color: #fff2c6; margin-bottom: 6px; }
+.gb-card-desc{ color: rgba(255,255,255,0.74); line-height: 1.5; }
+
+/* ===== 가계부 / 커뮤니티 카드 헤더 가독성 개선 ===== */
+
+/* 카드 헤더 타이틀 */
+.gb-card-header .gb-card-title{
+  color:#C39D17FF;              /* 진한 브라운 */
+  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* 카드 헤더 안의 버튼 */
+.gb-card-header .btn,
+.gb-card-header .gb-btn{
+  color: #32290CFF;
+  font-weight: 800;
+}
+
+/* 수입 / 지출 강조 */
+.ledger-income{
+  color: #1b7f3a;       /* 고급 그린 */
+  font-weight: 800;
+}
+
+.ledger-expense{
+  color: #c62828;       /* 안정 레드 */
+  font-weight: 800;
+}
+
+/* 금액 강조 */
+.ledger-amount{
+  font-weight: 800;
+  color: #2e2e2e;
+}
+
+
+/* ===== Ledger Summary ===== */
+.ledger-summary{
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summary-box{
+  flex: 1;
+  padding: 16px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid rgba(245,197,66,0.35);
+  text-align: center;
+}
+
+.summary-box .label{
+  font-size: 13px;
+  font-weight: 700;
+  color: #777;
+}
+
+.summary-box .value{
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.summary-box.income .value{ color:#1b7f3a; }
+.summary-box.expense .value{ color:#c62828; }
+.summary-box.balance .value{ color:#2b1a00; }
+
+/* 오늘 내역 강조 */
+.today-row td{
+  background: rgba(255, 216, 77, 0.25) !important;
+  font-weight: 800;
+}
+
+
+

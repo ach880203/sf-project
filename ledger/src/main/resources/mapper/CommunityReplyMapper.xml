@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.reply.CommunityReplyMapper">
+
+  <!-- 댓글 등록 -->
+  <insert id="insert">
+    <selectKey keyProperty="rno" order="AFTER" resultType="int">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    INSERT INTO tbl_community_reply
+      (bno, replyText, replyer)
+    VALUES
+      (#{bno}, #{replyText}, #{replyer})
+  </insert>
+
+  <!-- 댓글 단건 조회 -->
+  <select id="read" resultType="CommunityReplyDTO">
+    SELECT
+      rno,
+      replyText,
+      replyer,
+      replydate AS replyDate,
+      updatedate AS updateDate,
+      delflag,
+      bno
+    FROM tbl_community_reply
+    WHERE rno = #{rno}
+      AND delflag = false
+  </select>
+
+  <!-- 댓글 수정 -->
+  <update id="update">
+    UPDATE tbl_community_reply
+    SET replyText = #{replyText}
+    WHERE rno = #{rno}
+      AND delflag = false
+  </update>
+
+  <!-- 댓글 삭제 (soft delete) -->
+  <update id="delete">
+    UPDATE tbl_community_reply
+    SET delflag = true
+    WHERE rno = #{rno}
+      AND delflag = false
+  </update>
+
+  <!-- 댓글 목록 + 페이징 -->
+  <select id="listOfBoard" resultType="CommunityReplyDTO">
+    SELECT
+      rno,
+      replyText,
+      replyer,
+      replydate AS replyDate,
+      updatedate AS updateDate,
+      delflag,
+      bno
+    FROM tbl_community_reply
+    WHERE bno = #{bno}
+      AND delflag = false
+    ORDER BY rno DESC
+    LIMIT #{limit} OFFSET #{skip}
+  </select>
+
+  <!-- 댓글 개수 -->
+  <select id="countOfBoard" resultType="int">
+    SELECT COUNT(rno)
+    FROM tbl_community_reply
+    WHERE bno = #{bno}
+      AND delflag = false
+  </select>
+
+</mapper>

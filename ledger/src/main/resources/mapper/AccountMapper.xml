@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.Account.AccountMapper">
+  
+  <insert id="insert">
+  	insert into tbl_account(uid, upw, uname, email)
+  	values(#{uid}, #{upw}, #{uname}, #{email})
+  </insert>
+  
+  <insert id="insertRoles">
+  
+  	insert into tbl_account_roles(uid, rolename)
+  	values
+  	
+  	<foreach collection="roleNames" item="role" separator=",">
+  		(#{uid}, #{role})
+  	</foreach>
+  
+  </insert>
+  
+  <resultMap type="org.zerock.Account.AccountDTO" id="selectMap">
+  	<id property="uid" column="uid" />
+  	<result property="upw" column="upw"/>
+  	<result property="uname" column="uname"/>
+  	<result property="email" column="email"/>
+  	
+  	<collection property="roleNames" ofType="org.zerock.Account.AccountRole">
+  		<result column="rolename" 
+  		  		typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+  				javaType="AccountRole" />
+  	</collection>
+  </resultMap>
+  
+  <select id="selectOne" resultMap="selectMap">
+  
+  select a.uid, a.upw, a.uname, a.email, r.rolename
+  from  tbl_account a
+  inner join tbl_account_roles r
+  on a.uid = r.uid
+  where a.uid = #{uid};
+  
+  </select>
+  	
+
+  
+</mapper>
+

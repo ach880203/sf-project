@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		https://www.springframework.org/schema/context/spring-context.xsd
+		
+		http://www.springframework.org/schema/tx 
+		https://www.springframework.org/schema/tx/spring-tx.xsd
+		
+		http://www.springframework.org/schema/aop 
+		https://www.springframework.org/schema/aop/spring-aop.xsd
+	
+		http://mybatis.org/schema/mybatis-spring
+		http://mybatis.org/schema/mybatis-spring.xsd ">
+
+	<context:component-scan base-package="org.zerock.service" />
+	
+	<bean name="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/springdb?serverTimezone=Asia/Seoul" />
+		<property name="username" value="springdbuser" />
+		<property name="password" value="1234" />
+		<property name="connectionTimeout" value="30000" />
+		<property name="minimumIdle" value="2" />
+	</bean>
+	
+	<bean name="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:/mapper/*.xml" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+	
+	<!-- 트렌젝션 메니저 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- @Transaction 트렌젝션 활성화 -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager"/> --> 
+	<tx:annotation-driven /> 
+	
+	<mybatis-spring:scan base-package="org.zerock"/>
+	
+	<context:component-scan base-package="org.zerock.security" />
+	<context:component-scan base-package="org.zerock.aop" />
+	
+	<aop:aspectj-autoproxy  />
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

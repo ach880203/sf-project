@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.ledger.LedgerMapper">
+
+  <insert id="insert" parameterType="org.zerock.ledger.LedgerDTO" useGeneratedKeys="true" keyProperty="id">
+  	INSERT INTO tbl_ledger (uid, type, amount, category, title, memo, spent_at)
+    VALUES (#{uid}, #{type}, #{amount}, #{category}, #{title}, #{memo}, #{spentAt})
+  </insert>
+
+
+  <sql id="baseWhere">
+    WHERE uid = #{uid}
+      AND delflag = 0
+
+    <if test="cri != null">
+      <if test="cri.ledgerType != null and cri.ledgerType != ''">
+        AND type = #{cri.ledgerType}
+      </if>
+
+      <if test="cri.category != null and cri.category != ''">
+        AND category = #{cri.category}
+      </if>
+
+      <if test="cri.keyword != null and cri.keyword != ''">
+        AND (title LIKE CONCAT('%', #{cri.keyword}, '%')
+             OR memo LIKE CONCAT('%', #{cri.keyword}, '%'))
+      </if>
+
+      <if test="cri.fromDate != null and cri.fromDate != ''">
+        AND spent_at &gt;= STR_TO_DATE(CONCAT(#{cri.fromDate}, ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+      </if>
+
+      <if test="cri.toDate != null and cri.toDate != ''">
+        AND spent_at &lt;= STR_TO_DATE(CONCAT(#{cri.toDate}, ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+      </if>
+    </if>
+  </sql>
+
+  <select id="selectOne" resultType="org.zerock.ledger.LedgerDTO">
+    SELECT id, uid, type, amount, category, title, memo,
+           spent_at AS spentAt,
+           delflag, regdate, updatedate
+    FROM tbl_ledger
+    WHERE id = #{id}
+      AND uid = #{uid}
+      AND delflag = 0
+  </select>
+
+  <select id="selectList" resultType="org.zerock.ledger.LedgerDTO">
+    SELECT id, uid, type, amount, category, title, memo,
+           spent_at AS spentAt,
+           delflag, regdate, updatedate
+    FROM tbl_ledger
+    <include refid="baseWhere"/>
+    ORDER BY spent_at DESC, id DESC
+    LIMIT #{cri.amount} OFFSET #{cri.skip}
+  </select>
+
+  <select id="getTotal" resultType="int">
+    SELECT COUNT(*)
+    FROM tbl_ledger
+    <include refid="baseWhere"/>
+  </select>
+
+  <update id="update">
+    UPDATE tbl_ledger
+    SET type = #{dto.type},
+        amount = #{dto.amount},
+        category = #{dto.category},
+        title = #{dto.title},
+        memo = #{dto.memo},
+        spent_at = #{dto.spentAt}
+    WHERE id = #{dto.id}
+      AND uid = #{uid}
+      AND delflag = 0
+  </update>
+
+  <update id="softDelete">
+    UPDATE tbl_ledger
+    SET delflag = 1
+    WHERE id = #{id}
+      AND uid = #{uid}
+      AND delflag = 0
+  </update>
+  
+  <insert id="insertBatch">
+  INSERT INTO tbl_ledger(uid, type, amount, category, title, memo, spent_at)
+  VALUES
+  <foreach collection="list" item="dto" separator=",">
+    (#{dto.uid}, #{dto.type}, #{dto.amount}, #{dto.category}, #{dto.title}, #{dto.memo}, #{dto.spentAt})
+  </foreach>
+</insert>
+
+
+</mapper>
