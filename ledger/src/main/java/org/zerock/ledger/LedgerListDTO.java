@@ -12,6 +12,9 @@ public class LedgerListDTO {
   // ====== 페이징 ======
   private int pageNum = 1;   // 기본 1페이지
   private int amount = 10;   // 기본 10개
+  private Integer year;
+  private Integer month;
+
 
   //  기본 생성자 (그대로)
   public LedgerListDTO() {
@@ -33,9 +36,13 @@ public class LedgerListDTO {
 
   // pageNum/amount 방어
   public void normalize() {
-    if (pageNum <= 0) pageNum = 1;
-    if (amount <= 0) amount = 10;
-  }
+	    if (pageNum <= 0) pageNum = 1;
+	    if (amount <= 0) amount = 10;
+
+	    java.time.LocalDate now = java.time.LocalDate.now();
+	    if (year == null || year <= 0) year = now.getYear();
+	    if (month == null || month <= 0 || month > 12) month = now.getMonthValue();
+	  }
 
   // ====== 검색 조건 ======
   private String ledgerType;   // INCOME/EXPENSE
@@ -43,6 +50,8 @@ public class LedgerListDTO {
   private String keyword;      // title/memo 검색용
   private String fromDate;     // yyyy-MM-dd
   private String toDate;       // yyyy-MM-dd
+  
+  
 
   // null을 ""로 정리해서 MyBatis 조건식에 맞게
   public void normalizeStrings() {

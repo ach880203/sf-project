@@ -19,5 +19,14 @@ public interface LedgerMapper {
   int softDelete(@Param("id") Long id, @Param("uid") String uid);
   
   int insertBatch(@org.apache.ibatis.annotations.Param("list") java.util.List<LedgerDTO> list);
+  
+  LedgerSummaryDTO selectSummary(@Param("uid") String uid, @Param("cri") LedgerListDTO cri);
+  
+  LedgerSummaryDTO selectSummaryAll(@Param("uid") String uid, @Param("cri") LedgerListDTO cri);
+  
+  List<LedgerDTO> selectListAll(@Param("uid") String uid);
+
+  
+
 
 }

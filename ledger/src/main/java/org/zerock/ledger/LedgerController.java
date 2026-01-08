@@ -3,6 +3,7 @@ package org.zerock.ledger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -43,19 +44,49 @@ public class LedgerController {
 
   @GetMapping("/list")
   public String list(LedgerListDTO cri, Authentication authentication, Model model) {
+
     String uid = loginUid(authentication);
-    log.info("LEDGER LIST uid={}, cri={}", uid, cri);
-    
+
+    if (cri == null) cri = new LedgerListDTO();
+    cri.normalize();
+    cri.normalizeStrings();
+
+    // 목록은 사용자 검색조건 그대로(페이징/필터 포함)
     LedgerPageDTO pageDTO = ledgerService.getList(uid, cri);
-    LedgerSummaryDTO summary = ledgerService.getSummary(uid, cri);
+
+    // "월 기준 요약/Top3"는 검색조건(카테고리/키워드/기간) 제거해서 고정
+    LedgerListDTO monthCri = new LedgerListDTO();
+    monthCri.setYear(cri.getYear());
+    monthCri.setMonth(cri.getMonth());
+    monthCri.normalize();
+    monthCri.normalizeStrings();
+
+    LedgerSummaryDTO monthSummary = ledgerService.getSummary(uid, monthCri);
+
+    // Top3: 이번달 기준
+    List<LedgerCategorySummaryDTO> topMonth = ledgerService.getTopExpenseCategories(uid, monthCri);
+
+    // Top3: 전체 기준
+    List<LedgerCategorySummaryDTO> topAll = ledgerService.getTopExpenseCategoriesAll(uid);
+
+    // 전체 요약
+    LedgerSummaryDTO totalSummary = ledgerService.getSummaryAll(uid);
 
     model.addAttribute("dto", pageDTO);
-    model.addAttribute("summary", summary);
+    model.addAttribute("monthSummary", monthSummary);
+    model.addAttribute("totalSummary", totalSummary);
 
+    model.addAttribute("topMonth", topMonth);
+    model.addAttribute("topAll", topAll);
 
-    model.addAttribute("dto", ledgerService.getList(uid, cri));
+    // read -> list 복귀용으로 현재 검색상태를 jsp에서 쓸 수 있게
+    model.addAttribute("cri", cri);
+
     return "ledger/ledgerList";
   }
+
+
+
 
   @GetMapping("/read")
   public String read(@RequestParam("id") Long id,

@@ -28,6 +28,10 @@ public class LedgerPageDTO {
   private final String keyword;
   private final String fromDate;
   private final String toDate;
+  
+  private final Integer year;
+  private final Integer month;
+
 
   private LedgerPageDTO(List<LedgerDTO> list, int total, LedgerListDTO cri) {
 
@@ -36,6 +40,8 @@ public class LedgerPageDTO {
 
     this.pageNum = cri.getPageNum();
     this.amount = cri.getAmount();
+    this.year = cri.getYear();
+    this.month = cri.getMonth();
 
     // 10개 단위 페이지 블록
     int tempEnd = (int) (Math.ceil(this.pageNum / 10.0)) * 10;

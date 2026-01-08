@@ -58,7 +58,8 @@ public class SecurityConfig {
           new AntPathRequestMatcher("/account/login"),
           new AntPathRequestMatcher("/community/list"),
           new AntPathRequestMatcher("/community/read/**"),
-          new AntPathRequestMatcher("/community/read")
+          new AntPathRequestMatcher("/community/read"),
+          new AntPathRequestMatcher("/error/**")
       ).permitAll();
 
       config.requestMatchers(new AntPathRequestMatcher("/replies/**")).authenticated();
@@ -68,7 +69,7 @@ public class SecurityConfig {
       config.anyRequest().authenticated();
     });
 
-    // ✅ SavedRequest 캐시
+    // SavedRequest 캐시
     RequestCache requestCache = new HttpSessionRequestCache();
 
     // 2. 로그인
@@ -79,7 +80,7 @@ public class SecurityConfig {
       // 기본은 "/login"
       login.loginProcessingUrl("/account/login");
 
-      // ✅ 성공 시: SavedRequest(보호페이지) > prevPage(직전페이지) > /home
+      // 성공 시: SavedRequest(보호페이지) > prevPage(직전페이지) > /home
       login.successHandler((request, response, authentication) -> {
 
         String ctx = request.getContextPath();

@@ -23,65 +23,205 @@
 
 			<a class="btn btn-warning" href="<c:url value='/ledger/register'/>">+
 				내역 등록</a>
-			<!-- <a href="<c:url value='/ledger/register'/>" class="gb-btn gb-btn-primary">✍️ 등록</a> -->
 		</div>
 
 		<div class="gb-card-body">
 
-				//요약 데이터 박스 
 			<div class="ledger-summary">
 
-				<div class="summary-box income">
-					<div class="label">총 수입</div>
-					<div class="value">
-						<fmt:formatNumber value="${summary.income}" pattern="#,###" />
-						원
-					</div>
+  				<div class="summary-box income">
+    				<div class="label">이번 달 수입</div>
+    				<div class="value"><fmt:formatNumber value="${monthSummary.income}" pattern="#,###"/>원</div>
+  				</div>
+
+  				<div class="summary-box expense">
+    				<div class="label">이번 달 지출</div>
+    				<div class="value"><fmt:formatNumber value="${monthSummary.expense}" pattern="#,###"/>원</div>
+  				</div>
+
+				  <div class="summary-box balance">
+    				<div class="label">이번 달 잔액</div>
+    				<div class="value"><fmt:formatNumber value="${monthSummary.balance}" pattern="#,###"/>원</div>
+  				</div>
+
 				</div>
 
-				<div class="summary-box expense">
-					<div class="label">총 지출</div>
-					<div class="value">
-						<fmt:formatNumber value="${summary.expense}" pattern="#,###" />
-						원
-					</div>
-				</div>
+				<div class="ledger-summary total">
+  					<div class="summary-box income">
+    					<div class="label">전체 수입</div>
+    					<div class="value"><fmt:formatNumber value="${totalSummary.income}" pattern="#,###"/>원</div>
+  				</div>
 
-				<div class="summary-box balance">
-					<div class="label">잔액</div>
-					<div class="value">
-						<fmt:formatNumber value="${summary.balance}" pattern="#,###" />
-						원
-					</div>
-				</div>
+  				<div class="summary-box expense">
+    				<div class="label">전체 지출</div>
+    				<div class="value"><fmt:formatNumber value="${totalSummary.expense}" pattern="#,###"/>원</div>
+  				</div>
 
-			</div>
+  				<div class="summary-box balance">
+    				<div class="label">전체 잔액</div>
+    				<div class="value"><fmt:formatNumber value="${totalSummary.balance}" pattern="#,###"/>원</div>
+  				</div>
+		</div>
+
+			
+			<div class="top-tabs">
+  <button type="button" class="top-tab active" data-target="topMonthBox">이번달 TOP3</button>
+  <button type="button" class="top-tab" data-target="topAllBox">전체 TOP3</button>
+</div>
+
+<div id="topMonthBox" class="top-box">
+  <c:if test="${not empty topMonth}">
+    <div class="expense-top-wrap">
+      <div class="top-title">💸 이번달 지출 TOP 3</div>
+      <div class="top-badges">
+        <c:forEach var="cat" items="${topMonth}">
+          <span class="expense-badge">
+            <!-- 네 기존 c:choose 그대로 -->
+            <c:out value="${cat.category}" />
+            <span class="badge-amount">
+              <fmt:formatNumber value="${cat.totalAmount}" pattern="#,###"/>원
+            </span>
+          </span>
+        </c:forEach>
+      </div>
+    </div>
+  </c:if>
+</div>
+
+<div id="topAllBox" class="top-box" style="display:none;">
+  <c:if test="${not empty topAll}">
+    <div class="expense-top-wrap">
+      <div class="top-title">🏆 전체 지출 TOP 3</div>
+      <div class="top-badges">
+        <c:forEach var="cat" items="${topAll}">
+          <span class="expense-badge">
+            <c:out value="${cat.category}" />
+            <span class="badge-amount">
+              <fmt:formatNumber value="${cat.totalAmount}" pattern="#,###"/>원
+            </span>
+          </span>
+        </c:forEach>
+      </div>
+    </div>
+  </c:if>
+</div>
+
+<script>
+  (function(){
+    const tabs = document.querySelectorAll(".top-tab");
+    tabs.forEach(t => {
+      t.addEventListener("click", () => {
+        tabs.forEach(x => x.classList.remove("active"));
+        t.classList.add("active");
+        document.querySelectorAll(".top-box").forEach(b => b.style.display="none");
+        document.getElementById(t.dataset.target).style.display="block";
+      });
+    });
+  })();
+</script>
+
+			
+			<c:set var="y" value="${dto.year}" />
+<c:set var="m" value="${dto.month}" />
+
+<c:set var="prevYear" value="${m == 1 ? y-1 : y}" />
+<c:set var="prevMonth" value="${m == 1 ? 12 : m-1}" />
+
+<c:set var="nextYear" value="${m == 12 ? y+1 : y}" />
+<c:set var="nextMonth" value="${m == 12 ? 1 : m+1}" />
+
+<div class="month-nav">
+  <c:url var="prevMonthUrl" value="/ledger/list">
+    <c:param name="year" value="${prevYear}" />
+    <c:param name="month" value="${prevMonth}" />
+    <c:param name="ledgerType" value="${dto.ledgerType}" />
+    <c:param name="category" value="${dto.category}" />
+    <c:param name="keyword" value="${dto.keyword}" />
+  </c:url>
+
+  <c:url var="thisMonthUrl" value="/ledger/list" />
+
+  <c:url var="nextMonthUrl" value="/ledger/list">
+    <c:param name="year" value="${nextYear}" />
+    <c:param name="month" value="${nextMonth}" />
+    <c:param name="ledgerType" value="${dto.ledgerType}" />
+    <c:param name="category" value="${dto.category}" />
+    <c:param name="keyword" value="${dto.keyword}" />
+  </c:url>
+
+  <a class="gb-btn gb-btn-ghost" href="${prevMonthUrl}">◀ 이전달</a>
+
+  <div class="month-title">
+    <span class="pill">${dto.year}년 ${dto.month}월</span>
+    <a class="gb-btn gb-btn-primary" href="${thisMonthUrl}">이번달</a>
+  </div>
+
+  <a class="gb-btn gb-btn-ghost" href="${nextMonthUrl}">다음달 ▶</a>
+</div>
+
+			
+			
+			
 
 
 			<!-- ================= 검색/필터 ================= -->
 			<form method="get" action="<c:url value='/ledger/list'/>"
 				class="gb-toolbar" style="gap: 10px; flex-wrap: wrap;">
-				<input type="hidden" name="pageNum" value="1" /> <input
-					type="hidden" name="amount" value="${dto.amount}" /> <select
-					class="form-select" name="ledgerType" style="width: 160px;">
+				
+				<input type="hidden" name="pageNum" value="1" /> 
+				
+				<input type="hidden" name="amount" value="${dto.amount}" /> 
+				
+				<select class="form-select" name="ledgerType" style="width: 160px;">
 					<option value="">전체</option>
 					<option value="INCOME"
 						${dto.ledgerType == 'INCOME'  ? 'selected' : ''}>수입</option>
 					<option value="EXPENSE"
 						${dto.ledgerType == 'EXPENSE' ? 'selected' : ''}>지출</option>
-				</select> <input class="form-control" name="category" placeholder="카테고리"
-					style="width: 180px;" value="<c:out value='${dto.category}'/>" />
+				</select> 
+				
+				<select class="form-select" name="year" style="width: 140px;">
+  					<c:forEach var="y" begin="2024" end="2028">
+    					<option value="${y}" ${dto.year == y ? 'selected' : ''}>${y}년</option>
+  					</c:forEach>
+				</select>
+
+				<select class="form-select" name="month" style="width: 120px;">
+  					<c:forEach var="m" begin="1" end="12">
+    					<option value="${m}" ${dto.month == m ? 'selected' : ''}>${m}월</option>
+  					</c:forEach>
+				</select>
+				
+				
+				<!-- <input class="form-control" name="category" placeholder="카테고리" style="width: 180px;" 
+					 value="<c:out value='${dto.category}'/>" /> -->
+		
+				<select class="form-select" name="category" style="width: 180px;">
+ 					<option value="" ${empty dto.category ? 'selected' : ''}>전체</option>
+
+ 					<option value="SALARY" ${dto.category == 'SALARY' ? 'selected' : ''}>월급</option>
+  					<option value="SHOP"   ${dto.category == 'SHOP'   ? 'selected' : ''}>쇼핑</option>
+  					<option value="CAFE"   ${dto.category == 'CAFE'   ? 'selected' : ''}>카페</option>
+  					<option value="TRANS"  ${dto.category == 'TRANS'  ? 'selected' : ''}>교통</option>
+  					<option value="FOOD"   ${dto.category == 'FOOD'   ? 'selected' : ''}>식비</option>
+  					<option value="ETC"    ${dto.category == 'ETC'    ? 'selected' : ''}>기타</option>
+				</select>
+
+				
 				<input class="form-control" name="keyword" placeholder="제목/메모 키워드"
-					style="width: 240px;" value="<c:out value='${dto.keyword}'/>" /> <input
-					class="form-control" type="date" name="fromDate"
+					style="width: 240px;" value="<c:out value='${dto.keyword}'/>" /> 
+				
+				<input class="form-control" type="date" name="fromDate"
 					style="width: 170px;" value="<c:out value='${dto.fromDate}'/>" />
+				
 				<input class="form-control" type="date" name="toDate"
 					style="width: 170px;" value="<c:out value='${dto.toDate}'/>" />
 
+				
 				<div class="d-flex gap-2">
 					<button type="submit" class="gb-btn gb-btn-primary">찾기</button>
 
-					<!-- ✅ 리셋 버튼: 조건 없이 목록으로 -->
+					<!-- 리셋 버튼: 조건 없이 목록으로 -->
 					<a href="<c:url value='/ledger/list'/>" class="gb-btn gb-btn-ghost">리셋</a>
 				</div>
 			</form>
@@ -100,8 +240,8 @@
 
 				<tbody>
 					<c:forEach var="row" items="${dto.ledgerDTOList}">
-						 <tr class="
 						     <!-- 해당가계부 항목 날짜, 오늘날짜 -->
+						 <tr class="
     						<c:if test='${row.spentAt.time / (1000*60*60*24) == now.time / (1000*60*60*24)}'>
      							 today-row
     						</c:if>">
@@ -138,8 +278,10 @@
 									</div>
 								</c:if></td>
 
-							<td class="ledger-amount" style="text-align: right;"><c:out
-									value="${row.amount}" /></td>
+							<td class="ledger-amount" style="text-align: right;">
+  								<fmt:formatNumber value="${row.amount}" pattern="#,###"/>
+							</td>
+
 						</tr>
 					</c:forEach>
 
@@ -164,6 +306,9 @@
 							<c:param name="keyword" value="${dto.keyword}" />
 							<c:param name="fromDate" value="${dto.fromDate}" />
 							<c:param name="toDate" value="${dto.toDate}" />
+							<c:param name="year" value="${dto.year}" />
+							<c:param name="month" value="${dto.month}" />
+							
 						</c:url>
 						<li class="page-item"><a class="page-link" href="${prevUrl}">Prev</a></li>
 					</c:if>
@@ -177,6 +322,9 @@
 							<c:param name="keyword" value="${dto.keyword}" />
 							<c:param name="fromDate" value="${dto.fromDate}" />
 							<c:param name="toDate" value="${dto.toDate}" />
+							<c:param name="year" value="${dto.year}" />
+							<c:param name="month" value="${dto.month}" />
+							
 						</c:url>
 
 						<li class="page-item ${dto.pageNum == num ? 'active' : ''}">
@@ -193,6 +341,9 @@
 							<c:param name="keyword" value="${dto.keyword}" />
 							<c:param name="fromDate" value="${dto.fromDate}" />
 							<c:param name="toDate" value="${dto.toDate}" />
+							<c:param name="year" value="${dto.year}" />
+							<c:param name="month" value="${dto.month}" />
+							
 						</c:url>
 						<li class="page-item"><a class="page-link" href="${nextUrl}">Next</a></li>
 					</c:if>

@@ -33,8 +33,8 @@
             <label class="form-label">구분</label>
             <select name="type" class="form-select" required>
   				<option value="">선택</option>
- 				<option value="INCOME"  <c:if test="${ledger.type == 'INCOME'}">selected</c:if>>수입</option>
- 				<option value="EXPENSE" <c:if test="${ledger.type == 'EXPENSE'}">selected</c:if>>지출</option>
+ 				<option value="INCOME"  ${ledger.type == 'INCOME' ? 'selected="selected"' : ''}>수입</option>
+				<option value="EXPENSE" ${ledger.type == 'EXPENSE' ? 'selected="selected"' : ''}>지출</option>
 			</select>
 
           </div>

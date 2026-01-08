@@ -457,5 +457,92 @@ body{
   font-weight: 800;
 }
 
+/* ===== 지출 TOP3 ===== */
+.expense-top-wrap{
+  margin: 14px 0 20px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255,216,77,0.18);
+  border: 2px solid rgba(245,197,66,0.35);
+}
+
+.top-title{
+  font-weight: 800;
+  color: #2b1a00;
+  margin-bottom: 10px;
+}
+
+.top-badges{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.expense-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid rgba(245,197,66,0.35);
+  font-weight: 800;
+  color: #2e2e2e;
+}
+
+.badge-amount{
+  color: #c62828;
+  font-weight: 800;
+}
+
+
+.month-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin: 10px 0 14px;
+  flex-wrap: wrap;
+}
+
+.month-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.month-title .pill{
+  display:inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(245,197,66,0.25);
+  background: rgba(255,216,77,0.18);
+  font-weight: 900;
+  color:#3a2a00;
+}
+
+.ledger-summary.total{
+  margin-top: 10px;
+  opacity: 0.92;
+}
+.ledger-summary.total .label{
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+.top-tabs{ display:flex; gap:8px; margin: 10px 0 6px; }
+.top-tab{
+  border:2px solid rgba(245,197,66,0.25);
+  background:#fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 900;
+  color:#3a2a00;
+  cursor:pointer;
+}
+.top-tab.active{
+  background: linear-gradient(135deg,#ffd84d,#f5b700);
+  border-color: transparent;
+}
 
 

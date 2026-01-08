@@ -36,6 +36,13 @@
       <if test="cri.toDate != null and cri.toDate != ''">
         AND spent_at &lt;= STR_TO_DATE(CONCAT(#{cri.toDate}, ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
       </if>
+      
+      <!-- 월 기본 필터 -->
+	  <if test="cri != null and cri.year != null and cri.month != null">
+  		AND YEAR(spent_at) = #{cri.year}
+  		AND MONTH(spent_at) = #{cri.month}
+	  </if>
+      
     </if>
   </sql>
 
@@ -58,12 +65,39 @@
     ORDER BY spent_at DESC, id DESC
     LIMIT #{cri.amount} OFFSET #{cri.skip}
   </select>
+  
+  <select id="selectListAll" resultType="org.zerock.ledger.LedgerDTO">
+    SELECT id, uid, type, amount, category, title, memo,
+           spent_at AS spentAt, delflag, regdate, updatedate
+    FROM tbl_ledger
+    WHERE uid = #{uid}
+      AND delflag = 0
+    ORDER BY spent_at DESC, id DESC
+  </select>
 
   <select id="getTotal" resultType="int">
     SELECT COUNT(*)
     FROM tbl_ledger
     <include refid="baseWhere"/>
   </select>
+  
+  <select id="selectSummary" resultType="org.zerock.ledger.LedgerSummaryDTO">
+  	SELECT
+    	COALESCE(SUM(CASE WHEN type = 'INCOME'  THEN amount ELSE 0 END), 0) AS income,
+    	COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) AS expense
+  	FROM tbl_ledger
+  <include refid="baseWhere"/>
+  </select>
+  
+  <select id="selectSummaryAll" resultType="org.zerock.ledger.LedgerSummaryDTO">
+  	SELECT
+    	COALESCE(SUM(CASE WHEN type = 'INCOME'  THEN amount ELSE 0 END), 0) AS income,
+    	COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) AS expense
+  	  FROM tbl_ledger
+  	  WHERE uid = #{uid}
+        AND delflag = 0
+  </select>
+  
 
   <update id="update">
     UPDATE tbl_ledger
